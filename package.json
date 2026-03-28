@@ -11,6 +11,11 @@
     "crawling",
     "ai-agent"
   ],
+  "author": {
+    "name": "CRW Project",
+    "email": "hello@fastcrw.com",
+    "url": "https://fastcrw.com"
+  },
   "license": "MIT",
   "homepage": "https://github.com/us/crw",
   "repository": {
