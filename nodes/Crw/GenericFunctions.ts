@@ -6,6 +6,11 @@ import type {
 } from 'n8n-workflow';
 import { sleep } from 'n8n-workflow';
 
+async function getBaseUrl(ctx: IExecuteFunctions): Promise<string> {
+	const credentials = await ctx.getCredentials('crwApi');
+	return (credentials.baseUrl as string).replace(/\/$/, '');
+}
+
 export async function crwApiRequest(
 	this: IExecuteFunctions,
 	method: IHttpRequestMethods,
@@ -13,26 +18,19 @@ export async function crwApiRequest(
 	body: IDataObject = {},
 	query: IDataObject = {},
 ): Promise<JsonObject> {
-	const credentials = await this.getCredentials('crwApi');
-	const baseUrl = (credentials.baseUrl as string).replace(/\/$/, '');
+	const baseUrl = await getBaseUrl(this);
 
-	const headers: Record<string, string> = {
-		'Content-Type': 'application/json',
-	};
-
-	const apiKey = credentials.apiKey as string;
-	if (apiKey) {
-		headers['Authorization'] = `Bearer ${apiKey}`;
-	}
-
-	const response = await this.helpers.httpRequest({
-		method,
-		url: `${baseUrl}${endpoint}`,
-		body,
-		qs: query,
-		headers,
-		json: true,
-	});
+	const response = await this.helpers.httpRequestWithAuthentication.call(
+		this,
+		'crwApi',
+		{
+			method,
+			url: `${baseUrl}${endpoint}`,
+			body,
+			qs: query,
+			json: true,
+		},
+	);
 
 	if (response.success === false) {
 		throw new Error(
