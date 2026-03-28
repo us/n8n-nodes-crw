@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/us/n8n-nodes-crw/compare/v0.1.2...v0.1.3) (2026-03-28)
+
+
+### Bug Fixes
+
+* use httpRequestWithAuthentication to pass n8n security scan ([caf036b](https://github.com/us/n8n-nodes-crw/commit/caf036b652324243782cca1492fc1350702e0fcc))
+
 ## [0.1.2](https://github.com/us/n8n-nodes-crw/compare/v0.1.1...v0.1.2) (2026-03-28)
 
 
