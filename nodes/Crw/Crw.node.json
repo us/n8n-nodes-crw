@@ -1,0 +1,22 @@
+{
+	"node": "n8n-nodes-crw.crw",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Data & Storage"],
+	"subcategories": {
+		"Data & Storage": ["Web Scraping"]
+	},
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://fastcrw.com/docs/rest-api"
+			}
+		],
+		"credentialDocumentation": [
+			{
+				"url": "https://fastcrw.com/docs/rest-api#authentication"
+			}
+		]
+	},
+	"alias": ["scrape", "crawl", "web", "markdown", "extract", "spider"]
+}
