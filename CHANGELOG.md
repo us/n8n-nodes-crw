@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/us/n8n-nodes-crw/compare/v0.1.1...v0.1.2) (2026-03-28)
+
+
+### Bug Fixes
+
+* use httpRequest and sleep to pass n8n security scan ([d37463d](https://github.com/us/n8n-nodes-crw/commit/d37463df1756b98199ace2e2f62b4649cf6bf8c8))
+
 ## [0.1.1](https://github.com/us/n8n-nodes-crw/compare/v0.1.0...v0.1.1) (2026-03-28)
 
 
