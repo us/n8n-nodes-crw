@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-crw",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "n8n community node for CRW — the open-source web scraper built for AI agents",
   "keywords": [
     "n8n-community-node-package",

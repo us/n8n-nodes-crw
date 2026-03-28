@@ -2,9 +2,9 @@ import type {
 	IDataObject,
 	IExecuteFunctions,
 	IHttpRequestMethods,
-	IRequestOptions,
 	JsonObject,
 } from 'n8n-workflow';
+import { sleep } from 'n8n-workflow';
 
 export async function crwApiRequest(
 	this: IExecuteFunctions,
@@ -16,21 +16,23 @@ export async function crwApiRequest(
 	const credentials = await this.getCredentials('crwApi');
 	const baseUrl = (credentials.baseUrl as string).replace(/\/$/, '');
 
-	const options: IRequestOptions = {
-		method,
-		uri: `${baseUrl}${endpoint}`,
-		body,
-		qs: query,
-		json: true,
-		headers: {},
+	const headers: Record<string, string> = {
+		'Content-Type': 'application/json',
 	};
 
 	const apiKey = credentials.apiKey as string;
 	if (apiKey) {
-		options.headers!['Authorization'] = `Bearer ${apiKey}`;
+		headers['Authorization'] = `Bearer ${apiKey}`;
 	}
 
-	const response = await this.helpers.request(options);
+	const response = await this.helpers.httpRequest({
+		method,
+		url: `${baseUrl}${endpoint}`,
+		body,
+		qs: query,
+		headers,
+		json: true,
+	});
 
 	if (response.success === false) {
 		throw new Error(
@@ -61,7 +63,7 @@ export async function crwApiRequestWithPolling(
 			return response;
 		}
 
-		await new Promise<void>((resolve) => setTimeout(resolve, pollIntervalSec * 1000));
+		await sleep(pollIntervalSec * 1000);
 	}
 
 	throw new Error(
