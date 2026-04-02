@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/us/n8n-nodes-crw/compare/v0.1.3...v0.2.0) (2026-04-02)
+
+
+### Features
+
+* add search operation and fix cloud base URL ([8d6f9e2](https://github.com/us/n8n-nodes-crw/commit/8d6f9e22bdadad1aa7ef2ad994e0b8e880caedb1))
+
 ## [0.1.3](https://github.com/us/n8n-nodes-crw/compare/v0.1.2...v0.1.3) (2026-03-28)
 
 
