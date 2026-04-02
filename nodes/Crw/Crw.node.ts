@@ -68,6 +68,12 @@ export class Crw implements INodeType {
 						description: 'Discover all URLs on a website',
 						action: 'Map site URLs',
 					},
+					{
+						name: 'Search',
+						value: 'search',
+						action: 'Search the web (cloud only)',
+						description: 'Search the web and optionally scrape results. Cloud-only feature.',
+					},
 				],
 				default: 'scrape',
 			},
@@ -417,6 +423,89 @@ export class Crw implements INodeType {
 					},
 				},
 			},
+
+			// ------ Search fields ------
+			{
+				displayName: 'Query',
+				name: 'query',
+				type: 'string',
+				default: '',
+				required: true,
+				placeholder: 'web scraping best practices',
+				description: 'The search query',
+				displayOptions: {
+					show: {
+						operation: ['search'],
+					},
+				},
+			},
+			{
+				displayName: 'Limit',
+				name: 'limit',
+				type: 'number',
+				default: 5,
+				description: 'Maximum number of search results to return',
+				displayOptions: {
+					show: {
+						operation: ['search'],
+					},
+				},
+			},
+			{
+				displayName: 'Additional Options',
+				name: 'searchOptions',
+				type: 'collection',
+				placeholder: 'Add Option',
+				default: {},
+				displayOptions: {
+					show: {
+						operation: ['search'],
+					},
+				},
+				options: [
+					{
+						displayName: 'Language',
+						name: 'lang',
+						type: 'string',
+						default: '',
+						placeholder: 'en',
+						description: 'Language code for search results',
+					},
+					{
+						displayName: 'Time Filter',
+						name: 'tbs',
+						type: 'options',
+						options: [
+							{ name: 'Past Hour', value: 'qdr:h' },
+							{ name: 'Past Day', value: 'qdr:d' },
+							{ name: 'Past Week', value: 'qdr:w' },
+							{ name: 'Past Month', value: 'qdr:m' },
+							{ name: 'Past Year', value: 'qdr:y' },
+						],
+						default: 'qdr:d',
+						description: 'Filter results by time range',
+					},
+					{
+						displayName: 'Sources',
+						name: 'sources',
+						type: 'multiOptions',
+						options: [
+							{ name: 'Web', value: 'web' },
+							{ name: 'News', value: 'news' },
+							{ name: 'Images', value: 'images' },
+						],
+						default: [],
+						description: 'Sources to search from',
+					},
+					{
+						displayName: 'Scrape Results',
+						name: 'scrapeResults',
+						type: 'boolean',
+						default: false,
+						description: 'Whether to scrape the content of each search result',
+					},
+				],
+			},
 		],
 	};
 
@@ -641,8 +730,38 @@ export class Crw implements INodeType {
 					} else {
 						returnData.push({ json: response });
 					}
+				} else if (operation === 'search') {
+					const query = this.getNodeParameter('query', i) as string;
+					const limit = this.getNodeParameter('limit', i) as number;
+					const options = this.getNodeParameter('searchOptions', i) as IDataObject;
+
+					const body: IDataObject = { query, limit };
+					if (options.lang) body.lang = options.lang;
+					if (options.tbs) body.tbs = options.tbs;
+					if (options.sources && (options.sources as string[]).length > 0) {
+						body.sources = options.sources;
+					}
+					if (options.scrapeResults) {
+						body.scrapeOptions = { formats: ['markdown'] };
+					}
+
+					const response = await crwApiRequest.call(
+						this,
+						'POST',
+						'/v1/search',
+						body,
+					);
+
+					const data = response.data;
+					if (Array.isArray(data)) {
+						for (const result of data) {
+							returnData.push({ json: result as IDataObject });
+						}
+					} else {
+						returnData.push({ json: response });
+					}
 				}
-			} catch (error) {
+				} catch (error) {
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: { error: (error as Error).message },

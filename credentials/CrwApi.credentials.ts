@@ -15,10 +15,10 @@ export class CrwApi implements ICredentialType {
 			displayName: 'Base URL',
 			name: 'baseUrl',
 			type: 'string',
-			default: 'https://fastcrw.com',
-			placeholder: 'https://fastcrw.com or http://localhost:3000',
+			default: 'https://fastcrw.com/api',
+			placeholder: 'https://fastcrw.com/api or http://localhost:3000',
 			description:
-				'CRW server URL. Use https://fastcrw.com for cloud or your self-hosted URL.',
+				'CRW server URL. Use https://fastcrw.com/api for cloud or your self-hosted URL.',
 			required: true,
 		},
 		{
