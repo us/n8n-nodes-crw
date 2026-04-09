@@ -762,14 +762,14 @@ export class Crw implements INodeType {
 					}
 				}
 				} catch (error) {
-				if (this.continueOnFail()) {
-					returnData.push({
-						json: { error: (error as Error).message },
-					});
-					continue;
+					if (this.continueOnFail()) {
+						returnData.push({
+							json: { error: (error as Error).message },
+						});
+						continue;
+					}
+					throw error;
 				}
-				throw error;
-			}
 		}
 
 		return [returnData];
